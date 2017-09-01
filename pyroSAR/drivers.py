@@ -42,6 +42,11 @@ from . import spatial
 from .ancillary import finder, parse_literal, urlQueryParser, run
 from .xml_util import getNamespaces
 
+# Add Logger
+import logging
+log = logging.getLogger(__name__)
+
+
 __LOCAL__ = ['sensor', 'projection', 'orbit', 'polarizations', 'acquisition_mode', 'start', 'stop', 'product',
              'spacing', 'samples', 'lines']
 
@@ -70,6 +75,7 @@ def identify_many(scenes):
                 id = identify(scene)
                 idlist.append(id)
             except IOError:
+                log.warn("Can not open the scene {}".format(id))
                 continue
         pbar.update(i + 1)
     pbar.finish()
@@ -380,7 +386,7 @@ class ID(object):
                                 with open(outname, 'w') as outfile:
                                     outfile.write(archive.read(item))
                             except zf.BadZipfile:
-                                print('corrupt archive, unpacking failed')
+                                log.error('corrupt archive, unpacking failed')
                                 continue
                 archive.close()
             else:
@@ -388,7 +394,7 @@ class ID(object):
                 archive.close()
 
         else:
-            print('unpacking is only supported for TAR and ZIP archives')
+            log.error('unpacking is only supported for TAR and ZIP archives')
             return
 
         self.scene = directory
@@ -1016,6 +1022,7 @@ class SAFE(ID):
 
         # iterate over the four image subsets
         for subset in subsets:
+            # todo When should this be printed to the commandline? What logging status is this getting?
             print(subset)
             xmin, ymin, xmax, ymax = subset
             xdiff = xmax - xmin
@@ -1359,7 +1366,7 @@ class Archive(object):
                 if str(e) == 'UNIQUE constraint failed: data.outname_base':
                     cursor = self.conn.execute('SELECT scene FROM data WHERE outname_base=?', (id.outname_base(),))
                     scene = cursor.fetchone()[0].encode('ascii')
-                    print('scene is already registered in the database at this location:', scene)
+                    log.info('scene is already registered in the database at this location:', scene)
                 else:
                     raise e
             if verbose:
@@ -1426,7 +1433,7 @@ class Archive(object):
         arg_valid = [x for x in args.keys() if x in self.get_colnames()]
         arg_invalid = [x for x in args.keys() if x not in self.get_colnames()]
         if len(arg_invalid) > 0:
-            print('the following arguments will be ignored as they are not registered in the data base: {}'.format(
+            log.warning('the following arguments will be ignored as they are not registered in the data base: {}'.format(
                 ', '.join(arg_invalid)))
         arg_format = []
         vals = []
@@ -1440,13 +1447,13 @@ class Archive(object):
                 arg_format.append('start>=?')
                 vals.append(mindate)
             else:
-                print('argument mindate is ignored, must be in format YYYYmmddTHHMMSS')
+                log.warning('argument mindate is ignored, must be in format YYYYmmddTHHMMSS')
         if maxdate:
             if re.search('[0-9]{8}T[0-9]{6}', maxdate):
                 arg_format.append('stop<=?')
                 vals.append(maxdate)
             else:
-                print('argument maxdate is ignored, must be in format YYYYmmddTHHMMSS')
+                log.warning('argument maxdate is ignored, must be in format YYYYmmddTHHMMSS')
 
         if polarizations:
             for pol in polarizations:
@@ -1460,10 +1467,10 @@ class Archive(object):
                 arg_format.append('st_intersects(GeomFromText(?, 4326), bbox) = 1')
                 vals.append(site_geom)
             else:
-                print('argument vectorobject is ignored, must be of type spatial.vector.Vector')
+                log.warning('argument vectorobject is ignored, must be of type spatial.vector.Vector')
 
         query = '''SELECT scene, outname_base FROM data WHERE {}'''.format(' AND '.join(arg_format))
-        print(query)
+        log.info(query)
         cursor = self.conn.execute(query, tuple(vals))
         if processdir:
             scenes = [x for x in cursor.fetchall()
