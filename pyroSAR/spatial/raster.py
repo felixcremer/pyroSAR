@@ -14,6 +14,7 @@ loaded to memory by calling functions matrix or load.
 # todo: function to write data with the same metadata as a given file
 # todo: documentation
 
+import logging
 import os
 import re
 import shutil
@@ -28,6 +29,8 @@ from ..ancillary import dissolve, multicore
 from osgeo import gdal, osr
 from osgeo.gdalconst import *
 
+log = logging.getLogger(__name__)
+
 os.environ['GDAL_PAM_PROXY_DIR'] = '/tmp'
 
 gdal.UseExceptions()
@@ -38,10 +41,11 @@ class Raster(object):
     def __init__(self, filename):
         if os.path.isfile(filename):
             self.filename = filename if os.path.isabs(filename) else os.path.join(os.getcwd(), filename)
+            log.debug("Opening the raster object {}".format(filename))
             self.raster = gdal.Open(filename, GA_ReadOnly)
         else:
             raise IOError('file does not exist')
-
+        log.debug("Declare metadata")
         self.cols = self.raster.RasterXSize
         self.rows = self.raster.RasterYSize
         self.bands = self.raster.RasterCount
@@ -52,6 +56,7 @@ class Raster(object):
         self.projection = self.raster.GetProjection()
         self.srs = osr.SpatialReference(wkt=self.projection)
         self.proj4 = self.srs.ExportToProj4()
+        log.debug("Convert projection information to EPSG")
         try:
             self.epsg = crsConvert(self.srs, 'epsg')
         except RuntimeError:
@@ -64,7 +69,6 @@ class Raster(object):
         # note: yres is negative!
         self.geo['xmax'] = self.geo['xmin'] + self.geo['xres'] * self.cols
         self.geo['ymin'] = self.geo['ymax'] + self.geo['yres'] * self.rows
-
         self.res = [abs(float(self.geo['xres'])), abs(float(self.geo['yres']))]
         self.nodata = self.raster.GetRasterBand(1).GetNoDataValue()
 
@@ -99,9 +103,9 @@ class Raster(object):
             else:
                 self.bands, self.rows, self.cols = shape
 
-            # print shape
-            # print self.cols, self.rows
-            # print self.raster.RasterXSize, self.raster.RasterYSize
+            log.debug(shape)
+            log.debug(self.cols, self.rows)
+            log.debug(self.raster.RasterXSize, self.raster.RasterYSize)
 
             self.dim = [self.rows, self.cols, self.bands]
             self.geo['xmin'] += dim[0] * self.geo['xres']
@@ -433,7 +437,7 @@ def stack(srcfiles, dstfile, resampling, targetres, srcnodata, dstnodata, shapef
     Returns:
         A single raster stack in ENVI format or multiple geotiff files of same extent.
     """
-
+    log.info('Beginning of Stacking')
     if layernames is not None:
         if len(layernames) != len(srcfiles):
             raise IOError('mismatch between number of source file groups and layernames')
@@ -517,7 +521,7 @@ def stack(srcfiles, dstfile, resampling, targetres, srcnodata, dstnodata, shapef
         else:
             files = [x for x in zip(srcfiles, dstfiles) if not os.path.isfile(x[1])]
             if len(files) == 0:
-                print('all target tiff files already exist, nothing to be done')
+                log.info('all target tiff files already exist, nothing to be done')
                 shutil.rmtree(tmpdir)
                 return
         srcfiles, dstfiles = map(list, zip(*files))
