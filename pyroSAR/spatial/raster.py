@@ -103,9 +103,9 @@ class Raster(object):
             else:
                 self.bands, self.rows, self.cols = shape
 
-            log.debug(shape)
-            log.debug(self.cols, self.rows)
-            log.debug(self.raster.RasterXSize, self.raster.RasterYSize)
+            log.debug("Shape of the array: {}".format(shape))
+            log.debug("Cols of the dataset:{0} \t Rows of the dataset: {1}".format(self.cols, self.rows))
+            log.debug("Cols of the raster:{0} \t Rows of the raster: {1}".format(self.raster.RasterXSize, self.raster.RasterYSize))
 
             self.dim = [self.rows, self.cols, self.bands]
             self.geo['xmin'] += dim[0] * self.geo['xres']
