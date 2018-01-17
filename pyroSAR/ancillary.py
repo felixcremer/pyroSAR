@@ -23,8 +23,12 @@ import inspect
 import os
 import subprocess as sp
 from time import mktime, strptime
+from StringIO import StringIO
+from urllib import urlencode
+from urlparse import urlparse, urlunparse
 import logging
 log = logging.getLogger(__name__)
+
 try:
     import pathos.multiprocessing as mp
 except ImportError:

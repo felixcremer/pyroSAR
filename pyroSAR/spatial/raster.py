@@ -69,7 +69,6 @@ class Raster(object):
         # note: yres is negative!
         self.geo['xmax'] = self.geo['xmin'] + self.geo['xres'] * self.cols
         self.geo['ymin'] = self.geo['ymax'] + self.geo['yres'] * self.rows
-
         self.res = [abs(float(self.geo['xres'])), abs(float(self.geo['yres']))]
         self.nodata = self.raster.GetRasterBand(1).GetNoDataValue()
 
