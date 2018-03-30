@@ -1,0 +1,733 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API documentation &mdash; pyroSAR 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyroSAR 0.2 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to pyroSAR’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyroSAR’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyroSAR 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-documentation">
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="drivers">
+<h1>Drivers<a class="headerlink" href="#drivers" title="Permalink to this headline">¶</a></h1>
+<p>The ID class and its subclasses allows easy and standardized access to the metadata of SAR scenes of different sensors.</p>
+<span class="target" id="module-pyroSAR.drivers"></span><p>This is the core script of package pyroSAR. It contains the drivers for the different SAR image formats and offers
+functionality for retrieving metadata, unpacking images, downloading ancillary files like DEMs and
+Orbit State Vector files as well as archiving scenes in a database.</p>
+<dl class="class">
+<dt id="pyroSAR.drivers.Archive">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">Archive</tt><big>(</big><em>dbfile</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility for storing SAR image metadata in a spatialite database</p>
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.export2shp">
+<tt class="descname">export2shp</tt><big>(</big><em>shp</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.export2shp" title="Permalink to this definition">¶</a></dt>
+<dd><p>export the database to a shapefile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shp</strong> &#8211; the name of the shapefile to be written</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.filter_scenelist">
+<tt class="descname">filter_scenelist</tt><big>(</big><em>scenelist</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.filter_scenelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter a list of scenes by file names already registered in the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scenelist</strong> &#8211; a list of scenes (absolute path strings or pyroSAR.ID objects)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list which only contains files whose basename is not yet registered in the database</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.get_colnames">
+<tt class="descname">get_colnames</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.get_colnames" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the names of the database table</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list containing the column names of the data table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.get_tablenames">
+<tt class="descname">get_tablenames</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.get_tablenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the names of all tables in the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of table names</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.get_unique_directories">
+<tt class="descname">get_unique_directories</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.get_unique_directories" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a list of directories containing registered scenes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of directory names</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.insert">
+<tt class="descname">insert</tt><big>(</big><em>scene_in</em>, <em>verbose=False</em>, <em>test=False</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert one or many scenes into the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>scene_in</strong> &#8211; a SAR scene or a list of scenes to be inserted</li>
+<li><strong>verbose</strong> &#8211; should status information and a progress bar be printed into the console?</li>
+<li><strong>test</strong> &#8211; should the insertion only be tested or directly be committed to the database?</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.is_registered">
+<tt class="descname">is_registered</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.is_registered" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple check if a scene is already registered in the database
+:param scene: a SAR scene
+:return: True|False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.move">
+<tt class="descname">move</tt><big>(</big><em>scenelist</em>, <em>directory</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>move a list of files while keeping the database entries up to date
+if a scene is registered in the database (in either the data or duplicates table),
+the scene entry is directly changed to the new location</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>scenelist</strong> &#8211; a list of file locations</li>
+<li><strong>directory</strong> &#8211; a folder to which the files are moved</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.select">
+<tt class="descname">select</tt><big>(</big><em>vectorobject=None</em>, <em>mindate=None</em>, <em>maxdate=None</em>, <em>processdir=None</em>, <em>recursive=False</em>, <em>polarizations=None</em>, <em>verbose=False</em>, <em>**args</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>select scenes from the database</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>vectorobject: an object of type spatial.vector.Vector
+mindate: a date string of format YYYYmmddTHHMMSS
+maxdate: a date string of format YYYYmmddTHHMMSS
+processdir: a directory to be scanned for already processed scenes; the selected scenes will be filtered to those that have not yet been processed
+recursive: should also the subdirectories of the processdir be scanned?
+<a href="#id1"><span class="problematic" id="id2">**</span></a>args: any further arguments (columns), which are registered in the database. See Archive.get_colnames()</dd>
+</dl>
+<p>Returns: a list of strings pointing to the file locations of the selected scenes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.Archive.select_duplicates">
+<tt class="descname">select_duplicates</tt><big>(</big><em>outname_base=None</em>, <em>scene=None</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.Archive.select_duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>select scenes from the duplicates table; either all or only one matching a specific basename or scene name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outname_base</strong> &#8211; the basename of the scene</li>
+<li><strong>scene</strong> &#8211; the scene name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list containing one or many scenes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyroSAR.drivers.Archive.size">
+<tt class="descname">size</tt><a class="headerlink" href="#pyroSAR.drivers.Archive.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the number of scenes registered in the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a two-entry tuple containing the number of scenes in (1) the main table and (2) the duplicates table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyroSAR.drivers.CEOS_ERS">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">CEOS_ERS</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.CEOS_ERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler class for ERS data in CEOS format</p>
+<dl class="docutils">
+<dt>References:</dt>
+<dd>ER-IS-EPO-GS-5902-3: Annex C. ERS SAR.SLC/SLC-I. CCT and EXABYTE (ESA 1998)</dd>
+</dl>
+<dl class="method">
+<dt id="pyroSAR.drivers.CEOS_ERS.scanMetadata">
+<tt class="descname">scanMetadata</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.CEOS_ERS.scanMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>read the leader file and extract relevant metadata</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyroSAR.drivers.CEOS_PSR">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">CEOS_PSR</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.CEOS_PSR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler class for ALOS-PALSAR data in CEOS format</p>
+<p>PALSAR-1:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>References:</dt>
+<dd>NEB-070062B: ALOS/PALSAR Level 1.1/1.5 product Format description (JAXA 2009)</dd>
+<dt>Products / processing levels:</dt>
+<dd>1.0
+1.1
+1.5</dd>
+<dt>Acquisition modes:</dt>
+<dd><p class="first">AB: [SP][HWDPC]
+A: supplemental remarks of the sensor type:</p>
+<blockquote>
+<div>S: Wide observation mode
+P: all other modes</div></blockquote>
+<dl class="last docutils">
+<dt>B: observation mode</dt>
+<dd>H: Fine mode
+W: ScanSAR mode
+D: Direct downlink mode
+P: Polarimetry mode
+C: Calibration mode</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>PALSAR-2:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>References:</dt>
+<dd>ALOS-2/PALSAR-2 Level 1.1/1.5/2.1/3.1 CEOS SAR Product Format Description</dd>
+<dt>Products / processing levels:</dt>
+<dd>1.0
+1.1
+1.5</dd>
+<dt>Acquisition modes:</dt>
+<dd>SBS: Spotlight mode 
+UBS: Ultra-fine mode Single polarization 
+UBD: Ultra-fine mode Dual polarization 
+HBS: High-sensitive mode Single polarization
+HBD: High-sensitive mode Dual polarization 
+HBQ: High-sensitive mode Full (Quad.) polarimetry 
+FBS: Fine mode Single polarization 
+FBD: Fine mode Dual polarization 
+FBQ: Fine mode Full (Quad.) polarimetry 
+WBS: Scan SAR nominal [14MHz] mode Single polarization 
+WBD: Scan SAR nominal [14MHz] mode Dual polarization 
+WWS: Scan SAR nominal [28MHz] mode Single polarization 
+WWD: Scan SAR nominal [28MHz] mode Dual polarization 
+VBS: Scan SAR wide mode Single polarization 
+VBD: Scan SAR wide mode Dual polarization</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyroSAR.drivers.ESA">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">ESA</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ESA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler class for SAR data in ESA format (Envisat ASAR, ERS-1/2)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyroSAR.drivers.ID">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">ID</tt><big>(</big><em>metadict</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class for SAR meta data handlers.</p>
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.bbox">
+<tt class="descname">bbox</tt><big>(</big><em>outname=None</em>, <em>overwrite=True</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the bounding box of a scene either as an vector object or written to a shapefile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outname</strong> &#8211; the name of the shapefile to be written, default: None</li>
+<li><strong>overwrite</strong> &#8211; ...an existing shapefile</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None if outname is None, otherwise an object of type pyroSAR.spatial.vector</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyroSAR.drivers.ID.compression">
+<tt class="descname">compression</tt><a class="headerlink" href="#pyroSAR.drivers.ID.compression" title="Permalink to this definition">¶</a></dt>
+<dd><p>check whether a scene is compressed into an tarfile or zipfile or not at all</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">either &#8216;zip&#8217;, &#8216;tar&#8217; or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.examine">
+<tt class="descname">examine</tt><big>(</big><em>include_folders=False</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.examine" title="Permalink to this definition">¶</a></dt>
+<dd><p>check whether any items in the SAR scene structure match the regular expression pattern defined by the class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>include_folders</strong> &#8211; also match folder (or just files)?</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">IOError</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.export2dict">
+<tt class="descname">export2dict</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.export2dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the uuid and the metadata that is defined in self.locals as a dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.export2sqlite">
+<tt class="descname">export2sqlite</tt><big>(</big><em>dbfile</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.export2sqlite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export relevant metadata to a sqlite database
+:param dbfile: the database file
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.findfiles">
+<tt class="descname">findfiles</tt><big>(</big><em>pattern</em>, <em>include_folders=False</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.findfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>find files in the scene archive, which match a pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pattern</strong> &#8211; the regular expression to match</li>
+<li><strong>include_folders</strong> &#8211; also match folder (or just files)?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return a list of file names</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.gdalinfo">
+<tt class="descname">gdalinfo</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.gdalinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>read metadata directly from the GDAL SAR image drivers
+:param scene: an archive containing a SAR scene
+:return a dictionary of metadata attributes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.getCorners">
+<tt class="descname">getCorners</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.getCorners" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract method for deriving the corner coordinates from a SAR scene
+to be implemented by individual format drivers
+:return dictionary with keys xmin, xmax, ymin and ymax</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.getFileObj">
+<tt class="descname">getFileObj</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.getFileObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a file into a readable file object
+if the scene is unpacked this will be a regular &#8216;file&#8217; object
+for a tarfile this is an object of type &#8216;tarfile.ExtFile&#8217;
+for a zipfile this is an StringIO object (the zipfile.ExtFile object does not support setting file pointers via function &#8216;seek&#8217;, which is needed later on)</p>
+<p>:param filename a name of a file in the scene archive, easiest to get with method ID.findfiles
+:return: a regular file object or tarfile.ExtFile or StringIO</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.getGammaImages">
+<tt class="descname">getGammaImages</tt><big>(</big><em>directory=None</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.getGammaImages" title="Permalink to this definition">¶</a></dt>
+<dd><p>list all files processed by GAMMA
+:param directory: the directory to be scanned; if left empty self.gammadir is scanned
+:return: a list of images processed by GAMMA
+:raises IOError</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.getHGT">
+<tt class="descname">getHGT</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.getHGT" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the names of all SRTM HGT tiles overlapping with the SAR scene
+:return names of the SRTM HGT tiles</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.is_processed">
+<tt class="descname">is_processed</tt><big>(</big><em>outdir</em>, <em>recursive=False</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.is_processed" title="Permalink to this definition">¶</a></dt>
+<dd><p>check whether a scene has already been processed and stored in the defined output directory (and subdirectories if recursive)
+:param outdir the directory to be checked
+:return does an image matching the scene pattern exist?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.outname_base">
+<tt class="descname">outname_base</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.outname_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse a string containing basic information about the scene in standardized format
+:return: a standardized name string unique to the scene</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyroSAR.drivers.ID.parse_date">
+<em class="property">static </em><tt class="descname">parse_date</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.parse_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>this function gathers known time formats provided in the different SAR products and converts them to a common standard of the form YYYYMMDDTHHMMSS
+:param x a string containing the time stamp
+:return a string containing the converted time stamp in format YYYYmmddTHHMMSS</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.scanMetadata">
+<tt class="descname">scanMetadata</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.scanMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract method to scan SAR scenes for metadata attributes
+the returning dictionary is to be registered as attribute meta in the object and is checked by ID.__init__ for
+a selection of standardized names
+:return: a dictionary containing the derived attributes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.summary">
+<tt class="descname">summary</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>print the standardized set of scene attributes; see ID.__init__ for values
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.ID.unpack">
+<tt class="descname">unpack</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.ID.unpack" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract method for unpacking SAR scenes into a defined directory
+this method differs between the individual drivers as the name of the directory is derived
+from different file/folder names of the scene
+Furthermore, the individual implementations are required to call ID._unpack to perform the actual unpacking
+once the name and folder structure are determined
+:param directory: the directory to which the scene is unpacked
+:return: None</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyroSAR.drivers.SAFE">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">SAFE</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.SAFE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler class for Sentinel-1 data</p>
+<dl class="docutils">
+<dt>References:</dt>
+<dd>S1-RS-MDA-52-7443 Sentinel-1 IPF Auxiliary Product Specification
+MPC-0243 Masking &#8220;No-value&#8221; Pixels on GRD Products generated by the Sentinel-1 ESA IPF</dd>
+</dl>
+<dl class="method">
+<dt id="pyroSAR.drivers.SAFE.getOSV">
+<tt class="descname">getOSV</tt><big>(</big><em>outdir</em>, <em>osvType='POE'</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.SAFE.getOSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>download Orbit State Vector files for the scene
+:param outdir: the directory of OSV files; subdirectories POEORB and RESORB are created automatically
+:param osvType: the type of orbit file either &#8216;POE&#8217;, &#8216;RES&#8217; or a list of both
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.SAFE.removeGRDBorderNoise">
+<tt class="descname">removeGRDBorderNoise</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.SAFE.removeGRDBorderNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>mask out Sentinel-1 image border noise
+reference:</p>
+<blockquote>
+<div>&#8216;Masking &#8220;No-value&#8221; Pixels on GRD Products generated by the Sentinel-1 ESA IPF&#8217; (issue 1, June 2015)
+available online under &#8216;<a class="reference external" href="https://sentinel.esa.int/web/sentinel/user-guides/sentinel-1-sar/document-library">https://sentinel.esa.int/web/sentinel/user-guides/sentinel-1-sar/document-library</a>&#8216;</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyroSAR.drivers.SAFE.scanMetadata">
+<tt class="descname">scanMetadata</tt><big>(</big><big>)</big><a class="headerlink" href="#pyroSAR.drivers.SAFE.scanMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>read the manifest.safe file and extract relevant metadata</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyroSAR.drivers.TSX">
+<em class="property">class </em><tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">TSX</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.TSX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler class for TerraSAR-X and TanDEM-X data</p>
+<dl class="docutils">
+<dt>References:</dt>
+<dd>TX-GS-DD-3302  TerraSAR-X Basic Product Specification Document
+TX-GS-DD-3303  TerraSAR-X Experimental Product Description
+TD-GS-PS-3028  TanDEM-X Experimental Product Description
+TerraSAR-X Image Product Guide (Airbus Defence and Space)</dd>
+<dt>Acquisition modes:</dt>
+<dd>ST:    Staring Spotlight
+HS:    High Resolution SpotLight
+HS300: High Resolution SpotLight 300 MHz
+SL:    SpotLight
+SM:    StripMap
+SC:    ScanSAR
+WS:    Wide ScanSAR</dd>
+<dt>Polarisation modes:</dt>
+<dd>Single (S): all acquisition modes
+Dual   (D): High Resolution SpotLight (HS), SpotLight (SL) and StripMap (SM)
+Twin   (T): StripMap (SM) (experimental)
+Quad   (Q): StripMap (SM) (experimental)</dd>
+<dt>Products:</dt>
+<dd>SSC: Single Look Slant Range Complex
+MGD: Multi Look Ground Range Detected
+GEC: Geocoded Ellipsoid Corrected
+EEC: Enhanced Ellipsoid Corrected</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyroSAR.drivers.filter_processed">
+<tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">filter_processed</tt><big>(</big><em>scenelist</em>, <em>outdir</em>, <em>recursive=False</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.filter_processed" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter a list of pyroSAR objects to those that have not yet been processed and stored in the defined directory
+the search for processed scenes is either done in the directory only or recursively into subdirectories
+the scenes must have been processed with pyroSAR in order to follow the right naming scheme
+:param scenelist: a list of pyroSAR objects
+:param outdir: the processing directory
+:param recursive: scan outdir recursively into subdirectories?
+:return: a list of those scenes, which have not been processed yet</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyroSAR.drivers.findfiles">
+<tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">findfiles</tt><big>(</big><em>scene</em>, <em>pattern</em>, <em>include_folders=False</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.findfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>find files in a scene archive, which match a pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>scene</strong> &#8211; the scene to scan</li>
+<li><strong>pattern</strong> &#8211; the regular expression to match</li>
+<li><strong>include_folders</strong> &#8211; also match folders (or just files)?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return a list of file names</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyroSAR.drivers.getFileObj">
+<tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">getFileObj</tt><big>(</big><em>scene</em>, <em>filename</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.getFileObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a file into a readable file object
+if the scene is unpacked this will be a regular &#8216;file&#8217; object
+for a tarfile this is an object of type &#8216;tarfile.ExtFile&#8217;
+for a zipfile this is an StringIO object (the zipfile.ExtFile object does not support setting file pointers via function &#8216;seek&#8217;, which is needed later on)</p>
+<p>:param filename a name of a file in the scene archive, easiest to get with method ID.findfiles
+:return: a regular file object or tarfile.ExtFile or StringIO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyroSAR.drivers.identify">
+<tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">identify</tt><big>(</big><em>scene</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.identify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a metadata handler of the given scene
+:param scene: a file name
+:return: a pyroSAR metadata handler</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyroSAR.drivers.identify_many">
+<tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">identify_many</tt><big>(</big><em>scenes</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.identify_many" title="Permalink to this definition">¶</a></dt>
+<dd><p>return metadata handlers of all valid scenes in a list, similar to function identify
+prints a progressbar
+:param scenes: a list of file names
+:return: a list of pyroSAR metadata handlers</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyroSAR.drivers.parse_date">
+<tt class="descclassname">pyroSAR.drivers.</tt><tt class="descname">parse_date</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#pyroSAR.drivers.parse_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>this function gathers known time formats provided in the different SAR products and converts them to a common standard of the form YYYYMMDDTHHMMSS
+:param x a string containing the time stamp or a datetime object
+:return a string containing the converted time stamp in format YYYYmmddTHHMMSS</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyroSAR.snap.util">
+<span id="preprocessing"></span><h1>Preprocessing<a class="headerlink" href="#module-pyroSAR.snap.util" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pyroSAR.snap.util.geocode">
+<tt class="descclassname">pyroSAR.snap.util.</tt><tt class="descname">geocode</tt><big>(</big><em>infile</em>, <em>outdir</em>, <em>t_srs=None</em>, <em>tr=20</em>, <em>polarizations='all'</em>, <em>shapefile=None</em>, <em>scaling='dB'</em>, <em>geocoding_type='Range-Doppler'</em>, <em>removeS1BoderNoise=True</em>, <em>offset=None</em>, <em>externalDEMFile=None</em>, <em>externalDEMNoDataValue=None</em>, <em>externalDEMApplyEGM=True</em>, <em>test=False</em><big>)</big><a class="headerlink" href="#pyroSAR.snap.util.geocode" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper function for geocoding SAR images using ESA SNAP</p>
+<p>infile: a pyroSAR.ID object or a file/folder name of a SAR scene
+outdir: the directory to write the final files to
+t_srs: a target geographic reference system (a string in WKT or PROJ4 format or a EPSG identifier number)
+tr: the target resolution in meters
+polarizations: the polarizations to be processed; can be a string for a single polarization e.g. &#8216;VV&#8217; or a list of several polarizations e.g. [&#8216;VV&#8217;, &#8216;VH&#8217;]
+shapefile: a vector file for subsetting the SAR scene to a test site
+scaling: should the output be in linear of decibel scaling? Input can be single strings e.g. &#8216;dB&#8217; or a list of both: [&#8216;linear&#8217;, &#8216;dB&#8217;]
+geocoding_type: the type of geocoding applied; can be either &#8216;Range-Doppler&#8217; or &#8216;SAR simulation cross correlation&#8217;
+removeS1BoderNoise: enables removal of S1 GRD border noise
+offset: a tuple defining offsets for left, right, top and bottom in pixels, e.g. (100, 100, 0, 0); this variable is overridden if a shapefile is defined
+externalDEMFile: the absolute path to an external DEM file
+externalDEMNoDataValue: the no data value of the external DEM. If not specified the function will try to read it from the specified external DEM.
+externalDEMApplyEGM: apply Earth Gravitational Model to external DEM?
+test: if set to True the workflow xml file is only written and not executed</p>
+<p>If only one polarization is selected the results are directly written to GeoTiff.
+Otherwise the results are first written to a folder containing ENVI files and then transformed to GeoTiff files (one for each polarization)
+If GeoTiff would directly be selected as output format for multiple polarizations then a multilayer GeoTiff
+is written by SNAP which is considered an unfavorable format</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API documentation</a></li>
+<li><a class="reference internal" href="#drivers">Drivers</a></li>
+<li><a class="reference internal" href="#module-pyroSAR.snap.util">Preprocessing</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to pyroSAR&#8217;s documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pyroSAR.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyroSAR’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">pyroSAR 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2018, John Truckenbrodt, Felix Cremer, Ismail Baris.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
