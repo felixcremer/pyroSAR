@@ -8,8 +8,11 @@ Welcome to pyroSAR's documentation!
 
 Contents:
 
+This is the documentation of pyroSAR.
+
 .. toctree::
-   :maxdepth: 2
+
+   pyroSAR
 
 
 
