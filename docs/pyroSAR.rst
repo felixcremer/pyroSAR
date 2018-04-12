@@ -8,10 +8,13 @@ The ID class and its subclasses allows easy and standardized access to the metad
 
 .. automodule:: pyroSAR.drivers
     :members:
+    :undoc-members:
+    :show-inheritance:
 
 Preprocessing
 =============
 
 .. automodule:: pyroSAR.snap.util
     :members:
-
+    :undoc-members:
+    :show-inheritance:
