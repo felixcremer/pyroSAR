@@ -214,13 +214,20 @@ def gpt(xmlfile):
                # '-Dsnap.dataio.bigtiff.compression.quality=0.75',
                xmlfile]
     else:
-        cmd = [gpt_exec, xmlfile]
-    proc = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT)
-    #out, err = proc.communicate()
-    for line in iter(proc.stdout.readline, ""):
-	print(line)
-    print proc.returncode
-    if proc.returncode != 0:
+        cmd = ['gpt', xmlfile]
+    print(cmd)
+   
+    proc = sp.Popen(cmd, stdout=sp.PIPE,  stderr=sp.STDOUT)
+    while True:
+        output = proc.stdout.readline()
+        if output == "" and proc.poll() is not None:
+	    returncode = proc.returncode
+            break
+        elif output:
+            print(output.strip())
+    
+    if returncode !=0:
+        print('failed: ', os.path.basename(infile))
         if os.path.isfile(outname + '.tif'):
             os.remove(outname + '.tif')
         elif os.path.isdir(outname):
