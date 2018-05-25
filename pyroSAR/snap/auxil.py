@@ -215,9 +215,11 @@ def gpt(xmlfile):
                xmlfile]
     else:
         cmd = [gpt_exec, xmlfile]
-
-    proc = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
-    out, err = proc.communicate()
+    proc = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT)
+    #out, err = proc.communicate()
+    for line in iter(proc.stdout.readline, ""):
+	print(line)
+    print proc.returncode
     if proc.returncode != 0:
         if os.path.isfile(outname + '.tif'):
             os.remove(outname + '.tif')
