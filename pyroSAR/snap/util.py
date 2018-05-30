@@ -172,7 +172,7 @@ def geocode(infile, outdir, t_srs=None, tr=20, polarizations='all', shapefile=No
         raise RuntimeError('scaling must be  a string of either "dB", "db" or "linear"')
 
     if scaling in ['dB', 'db']:
-	print("Scaling")
+        print("Scaling")
         lin2db = parse_node('lin2db')
         sourceNode = 'Terrain-Correction' if geocoding_type == 'Range-Doppler' else 'SARSim-Terrain-Correction'
         insert_node(workflow, sourceNode, lin2db)
@@ -183,7 +183,7 @@ def geocode(infile, outdir, t_srs=None, tr=20, polarizations='all', shapefile=No
     ############################################
     # add subset node and add bounding box coordinates of defined shapefile
     if shapefile:
-	print("Crop to shapefile")
+        print("Crop to shapefile")
         shp = shapefile if isinstance(shapefile, spatial.vector.Vector) else spatial.vector.Vector(shapefile)
         bounds = spatial.bbox(shp.extent, shp.wkt)
         bounds.reproject(id.projection)
@@ -264,7 +264,7 @@ def geocode(infile, outdir, t_srs=None, tr=20, polarizations='all', shapefile=No
 
     # execute the newly written workflow
     if not test:
-	print("Start gpt process")
+        print("Start gpt process")
         try:
             gpt(outname + '_proc.xml')
         except RuntimeError:
