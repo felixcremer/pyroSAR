@@ -185,7 +185,7 @@ def getAuxdata(datasets, scenes):
             print('not implemented yet')
 
 
-def gpt(xmlfile,options=[]):
+def gpt(xmlfile):
     """
     wrapper for ESA SNAP Graph Processing Tool GPT
     input is a readily formatted workflow xml file as created by function geocode in module snap.util
@@ -212,22 +212,32 @@ def gpt(xmlfile,options=[]):
                '-Dsnap.dataio.bigtiff.tiling.height=256',
                # '-Dsnap.dataio.bigtiff.compression.type=LZW',
                # '-Dsnap.dataio.bigtiff.compression.quality=0.75',
-               xmlfile, dissolve(options)]
+               xmlfile]
     else:
-        cmd = dissolve(['gpt', xmlfile, dissolve(options)])
+<<<<<<< HEAD
+        cmd = [gpt_exec, xmlfile]
+    proc = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT)
+    #out, err = proc.communicate()
+    for line in iter(proc.stdout.readline, ""):
+	print(line)
+    print proc.returncode
+    if proc.returncode != 0:
+=======
+        cmd = ['gpt', xmlfile]
     print(cmd)
    
     proc = sp.Popen(cmd, stdout=sp.PIPE,  stderr=sp.STDOUT)
     while True:
         output = proc.stdout.readline()
         if output == "" and proc.poll() is not None:
-            returncode = proc.returncode
+	    returncode = proc.returncode
             break
         elif output:
             print(output.strip())
     
     if returncode !=0:
         print('failed: ', os.path.basename(infile))
+>>>>>>> Debug gpt function (returncode not picked up correctly)
         if os.path.isfile(outname + '.tif'):
             os.remove(outname + '.tif')
         elif os.path.isdir(outname):
