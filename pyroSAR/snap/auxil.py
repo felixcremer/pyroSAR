@@ -220,11 +220,17 @@ def gpt(xmlfile,options=[]):
     proc = sp.Popen(cmd, stdout=sp.PIPE,  stderr=sp.STDOUT)
     while True:
         output = proc.stdout.readline()
+	#err = proc.stderr.readline()
+#	print(proc.poll())
         if output == "" and proc.poll() is not None:
             returncode = proc.returncode
             break
         elif output:
+#            print('Newline')
             print(output.strip())
+#            print('Error')
+#            print(err.strip())
+
     
     if returncode !=0:
         print('failed: ', os.path.basename(infile))
@@ -232,10 +238,10 @@ def gpt(xmlfile,options=[]):
             os.remove(outname + '.tif')
         elif os.path.isdir(outname):
             shutil.rmtree(outname)
-        print(out+err)
+        #print(out+err)
         print('failed: {}'.format(os.path.basename(infile)))
-        err_match = re.search('Error: (.*)\n', out+err)
-        errmessage = err_match.group(1) if err_match else err
+        err_match = re.search('Error: (.*)\n', output)
+        errmessage = err_match.group(1) if err_match else output
         raise RuntimeError(errmessage)
 
     if format == 'ENVI':
